@@ -3,24 +3,27 @@ const dotenv = require('dotenv');
 const connectDB = require('./config/db');
 const recipeRoutes = require('./routes/recipeRoutes');
 const cors = require('cors');
-// const { default: mongoose } = require('mongoose');
-// const mongoose = require('mongoose');
 
+// Load environment variables
 dotenv.config();
+
+// Connect to MongoDB
 connectDB();
 
 const app = express();
+
+// Middleware
 app.use(cors());
 app.use(express.json());
+
+// Health check endpoint
+app.get('/', (req, res) => {
+  res.send('API is running...');
+});
+
+// Recipe routes
 app.use('/api/recipes', recipeRoutes);
 
-// app.use('/api/recipes', recipeRoutes);
-
-// mongoose.connect(process.env.MONGO_URI)
-//   .then(() =>{ console.log('MongoDB Connected')
-//   app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-// })
-//   .catch((err) => console.error('MongoDB connection error:', err));
-  
+// Start the server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
